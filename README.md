@@ -7,6 +7,7 @@
 ## Built With
 
 - SQL
+- PostgreSQL
 
 ## Authors
 
