@@ -9,3 +9,14 @@ neutered boolean,
 weight_kg decimal,
 species text
 );
+
+CREATE TABLE owners(
+    id serial PRIMARY KEY,
+    full_name text,
+    age int
+);
+
+CREATE TABLE species(
+    id serial PRIMARY KEY,
+    name text
+);
