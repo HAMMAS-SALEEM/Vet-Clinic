@@ -13,65 +13,6 @@ SELECT * FROM animals WHERE weight_kg BETWEEN 10.4 AND 17.3;
 
 -- Second Project
 
--- TRANSACTION 01
-
-BEGIN;
-
-UPDATE animals
-SET species = 'unspecified';
-
-SELECT * FROM animals;
-
-ROLLBACK;
-
--- TRANSACTION 02
-
-BEGIN;
-
-UPDATE animals
-SET species = 'digimon'
-WHERE name LIKE '%mon';
-
-UPDATE animals
-SET species = 'pokemon'
-WHERE species IS NULL;
-
-COMMIT;
-
-SELECT * FROM animals;
-
--- TRANSACTION 03
-
-BEGIN;
-
-DELETE FROM animals;
-
-SELECT * FROM animals;
-
-ROLLBACK;
-
--- TRANSACTION 04
-
-BEGIN;
-
-DELETE FROM animals
-WHERE TO_CHAR(date_of_birth,'YYYY-MON-DD') > '2022-JAN-01';
-
-SAVEPOINT SP1;
-
-UPDATE animals
-SET weight_kg = weight_kg*-1;
-
-ROLLBACK TO SAVEPOINT SP1;
-
-UPDATE animals
-SET weight_kg = weight_kg*-1
-WHERE weight_kg < 0;
-
-COMMIT;
-
--- QUERIES
-
 SELECT COUNT(NAME) total_animals FROM animals;
 SELECT COUNT(NAME) total_animals FROM animals WHERE escape_attempts = 0;
 SELECT AVG(weight_kg) avg_weight FROM animals;
@@ -81,3 +22,46 @@ SELECT AVG(escape_attempts) avg_escape_attempts, species
 FROM animals
 WHERE TO_CHAR(date_of_birth, 'YYYY') BETWEEN '1990' AND '2000'
 GROUP BY species;
+
+-- Third Project
+
+SELECT a.name animal, o.full_name owner  
+FROM animals a, owners o 
+WHERE a.owner_id = o.id
+AND o.full_name = 'Melody Pond';
+
+SELECT a.name animal, s.name specie 
+FROM animals a, species s
+WHERE a.species_id = s.id
+AND s.name = 'Pokemon';
+
+SELECT a.name animal, o.full_name owner  
+FROM animals a
+FULL OUTER JOIN owners o 
+ON a.owner_id = o.id
+
+SELECT COUNT(a.id), s.name
+FROM animals a, species s
+WHERE a.species_id = s.id
+GROUP BY s.name;
+
+SELECT a.name animal, o.full_name owner, s.name
+FROM animals a, owners o, species s 
+WHERE a.owner_id = o.id
+AND a.species_id = s.id
+AND o.full_name = 'Jennifer Orwell'
+AND s.name = 'Digimon';
+
+SELECT a.name animal, o.full_name owner  
+FROM animals a, owners o 
+WHERE a.owner_id = o.id
+AND o.full_name = 'Dean Winchester'
+AND a.escape_attempts = 0;
+
+WITH new AS (SELECT COUNT(a.id) total_animals, o.full_name owner
+FROM animals a, owners o
+WHERE a.owner_id = o.id
+GROUP BY o.id)
+SELECT owner, total_animals
+FROM new
+WHERE total_animals = (SELECT MAX(total_animals) FROM new);
