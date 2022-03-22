@@ -7,3 +7,6 @@ INSERT INTO animals VALUES (4,'Angemon', '2005-Jun-12', 1, true, -45);
 INSERT INTO animals VALUES (5,'Boarmon', '2005-Jun-07', 7, true, 20.4);
 INSERT INTO animals VALUES (6,'Blossom', '1998-Oct-13', 3, true, 17);
 INSERT INTO animals VALUES (7,'Ditto', '2022-May-14', 4, true, 22);
+
+-- Owners Information
+
