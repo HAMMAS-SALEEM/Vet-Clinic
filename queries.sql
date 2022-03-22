@@ -24,3 +24,44 @@ WHERE TO_CHAR(date_of_birth, 'YYYY') BETWEEN '1990' AND '2000'
 GROUP BY species;
 
 -- Third Project
+
+SELECT a.name animal, o.full_name owner  
+FROM animals a, owners o 
+WHERE a.owner_id = o.id
+AND o.full_name = 'Melody Pond';
+
+SELECT a.name animal, s.name specie 
+FROM animals a, species s
+WHERE a.species_id = s.id
+AND s.name = 'Pokemon';
+
+SELECT a.name animal, o.full_name owner  
+FROM animals a
+FULL OUTER JOIN owners o 
+ON a.owner_id = o.id
+
+SELECT COUNT(a.id), s.name
+FROM animals a, species s
+WHERE a.species_id = s.id
+GROUP BY s.name;
+
+SELECT a.name animal, o.full_name owner, s.name
+FROM animals a, owners o, species s 
+WHERE a.owner_id = o.id
+AND a.species_id = s.id
+AND o.full_name = 'Jennifer Orwell'
+AND s.name = 'Digimon';
+
+SELECT a.name animal, o.full_name owner  
+FROM animals a, owners o 
+WHERE a.owner_id = o.id
+AND o.full_name = 'Dean Winchester'
+AND a.escape_attempts = 0;
+
+WITH new AS (SELECT COUNT(a.id) total_animals, o.full_name owner
+FROM animals a, owners o
+WHERE a.owner_id = o.id
+GROUP BY o.id)
+SELECT owner, total_animals
+FROM new
+WHERE total_animals = (SELECT MAX(total_animals) FROM new);
