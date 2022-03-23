@@ -120,7 +120,13 @@ GROUP BY animals.name, visit_date, vet
 ORDER BY visit_date DESC
 LIMIT 1;
 
-
+SELECT COUNT(date_of_visit)-(SELECT COUNT(vets.name) 
+FROM vets, specializations, animals, visits
+WHERE
+visits.vets_id = vets.id
+AND animals.id = visits.animals_id
+AND concat(animals.species_id, visits.vets_id) = concat(specializations.species_id, specializations.vets_id)) total_unspecialized_cases 
+FROM visits;
 
 WITH new AS(
     SELECT DISTINCT(animals.name) animal, COUNT(animals.name) total_visits, vets.name vet
