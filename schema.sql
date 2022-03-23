@@ -36,3 +36,24 @@ ADD COLUMN species_id INT REFERENCES species(id);
 
 ALTER TABLE animals
 ADD COLUMN owner_id INT REFERENCES owners(id);
+
+-- Fourth Project
+
+CREATE TABLE vets(
+    id serial PRIMARY KEY,
+    name text,
+    age int,
+    date_of_graduation date
+);
+
+CREATE TABLE specializations(
+    species_id int REFERENCES species(id),
+    vets_id int REFERENCES vets(id),
+    PRIMARY KEY (species_id, vets_id)
+);
+
+CREATE TABLE visits(
+    animals_id int REFERENCES animals(id),
+    vets_id int REFERENCES vets(id),
+    date_of_visit date
+);

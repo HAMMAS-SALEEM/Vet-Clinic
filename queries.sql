@@ -65,3 +65,75 @@ GROUP BY o.id)
 SELECT owner, total_animals
 FROM new
 WHERE total_animals = (SELECT MAX(total_animals) FROM new);
+
+-- Fourth Project
+
+SELECT animals.name animal, vets.name vet, visits.date_of_visit visit_date
+FROM animals, vets, visits
+WHERE animals.id = visits.animals_id
+AND vets.id = visits.vets_id
+AND vets.name = 'William Tatcher'
+ORDER BY date_of_visit DESC
+LIMIT 1;
+
+SELECT DISTINCT(animals.name) animal, vets.name vet, MAX(visits.date_of_visit)
+FROM animals, vets, visits
+WHERE animals.id = visits.animals_id
+AND vets.id = visits.vets_id
+AND vets.name = 'Stephanie Mendez'
+GROUP BY animals.name, vets.name;
+
+SELECT v.name vet, species.name
+FROM specializations s
+INNER JOIN species ON species.id = s.species_id
+FULL OUTER JOIN vets v ON s.vets_id = v.id;
+
+SELECT animals.name animal, vets.name vet, visits.date_of_visit visit_date
+FROM animals, vets, visits
+WHERE animals.id = visits.animals_id
+AND vets.id = visits.vets_id
+AND vets.name = 'Stephanie Mendez'
+AND TO_CHAR(visits.date_of_visit, 'YYYY-MM-DD') BETWEEN '2020-04-01' AND '2020-08-30';
+
+SELECT DISTINCT(animals.name) animal, COUNT(animals.name) total_visits
+FROM animals, vets, visits
+WHERE animals.id = visits.animals_id
+AND vets.id = visits.vets_id
+GROUP BY animals.name
+ORDER BY total_visits DESC
+LIMIT 1;
+
+SELECT DISTINCT(animals.name) animal, visits.date_of_visit visit_date, vets.name vet
+FROM vets, animals, visits
+WHERE visits.animals_id = animals.id
+AND visits.vets_id = vets.id
+AND vets.name = 'Maisy Smith'
+GROUP BY animals.name, visit_date, vet
+ORDER BY visit_date
+LIMIT 1;
+
+SELECT DISTINCT(animals.name) animal, visits.date_of_visit visit_date, vets.name vet
+FROM vets, animals, visits
+WHERE visits.animals_id = animals.id
+AND visits.vets_id = vets.id
+GROUP BY animals.name, visit_date, vet
+ORDER BY visit_date DESC
+LIMIT 1;
+
+SELECT COUNT(date_of_visit)-(SELECT COUNT(vets.name) 
+FROM vets, specializations, animals, visits
+WHERE
+visits.vets_id = vets.id
+AND animals.id = visits.animals_id
+AND concat(animals.species_id, visits.vets_id) = concat(specializations.species_id, specializations.vets_id)) total_unspecialized_cases 
+FROM visits;
+
+WITH new AS(
+    SELECT DISTINCT(animals.name) animal, COUNT(animals.name) total_visits, vets.name vet
+FROM vets, animals, visits
+WHERE visits.animals_id = animals.id
+AND visits.vets_id = vets.id
+AND vets.name = 'Maisy Smith'
+GROUP BY animals.name, vet
+)
+SELECT * FROM new WHERE total_visits = (SELECT MAX(total_visits) FROM new);
