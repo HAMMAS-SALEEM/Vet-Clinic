@@ -137,3 +137,9 @@ AND vets.name = 'Maisy Smith'
 GROUP BY animals.name, vet
 )
 SELECT * FROM new WHERE total_visits = (SELECT MAX(total_visits) FROM new);
+
+-- Project 05
+
+EXPLAIN ANALYZE SELECT COUNT(*) FROM visits where animal_id = 4;
+EXPLAIN ANALYZE SELECT * FROM visits where vet_id = 2;
+EXPLAIN ANALYZE SELECT * FROM owners where email = 'owner_18327@mail.com';
